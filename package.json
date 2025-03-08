@@ -21,11 +21,9 @@
     "src",
     "lib",
     "android",
-    "ios",
     "cpp",
     "*.podspec",
     "react-native.config.js",
-    "!ios/build",
     "!android/build",
     "!android/gradle",
     "!android/gradlew",
@@ -184,7 +182,6 @@
     "type": "modules",
     "jsSrcsDir": "src",
     "outputDir": {
-      "ios": "ios/generated",
       "android": "android/generated"
     },
     "android": {
