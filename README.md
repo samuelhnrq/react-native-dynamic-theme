@@ -209,5 +209,3 @@ Built with ❤️ and [create-react-native-library](https://github.com/callstack
 - 🔹 **Better structure & readability** for improved developer experience.
 - 🔹 **Explicit platform behavior** (Android 12+, older Android, iOS).
 - 🔹 **Error handling for unsupported platforms** (e.g., iOS).
-
-This version is ready for publishing! Let me know if you need any final tweaks. 🚀
