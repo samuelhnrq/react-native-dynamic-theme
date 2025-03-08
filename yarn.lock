@@ -1545,6 +1545,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@commitlint/config-angular-type-enum@npm:^19.8.0":
+  version: 19.8.0
+  resolution: "@commitlint/config-angular-type-enum@npm:19.8.0"
+  checksum: 46411077f11bbcf51ce398464e127dbf6686569071d6c28ed357039944d758d23dc0ec868758db89f837d60ff577fbd80023ceb9b23621c04ee38401e07f50b2
+  languageName: node
+  linkType: hard
+
+"@commitlint/config-angular@npm:latest":
+  version: 19.8.0
+  resolution: "@commitlint/config-angular@npm:19.8.0"
+  dependencies:
+    "@commitlint/config-angular-type-enum": ^19.8.0
+  checksum: aeb9131c26ccdea9435b7816bf6ffd92c3504032e6005827b713bd697523c8d2cf19f83c41008a6694179a9cb0b829c305b203472f9b76573797586ae89d9fb8
+  languageName: node
+  linkType: hard
+
 "@commitlint/config-conventional@npm:^17.0.2":
   version: 17.8.1
   resolution: "@commitlint/config-conventional@npm:17.8.1"
@@ -10661,6 +10677,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "react-native-dynamic-theme@workspace:."
   dependencies:
+    "@commitlint/config-angular": latest
     "@commitlint/config-conventional": ^17.0.2
     "@evilmartians/lefthook": ^1.5.0
     "@react-native-community/cli": 15.0.1
