@@ -5,3 +5,8 @@ export function getDynamicColorScheme(): DynamicColorScheme | void {
     return DynamicTheme.getDynamicColorScheme();
   }
 }
+
+export {
+  type DynamicColorScheme,
+  type ColorScheme,
+} from './NativeDynamicTheme';
