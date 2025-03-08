@@ -1,170 +1,213 @@
-# react-native-dynamic-theme
+---
 
-A React Native library for retrieving dynamic themes from Android devices, ensuring seamless theme adaptation for a better user experience.
+# react-native-dynamic-theme  
 
-## Features
+A React Native library for retrieving dynamic themes from Android devices, ensuring seamless theme adaptation for a better user experience.  
 
-- 📱 **System-Aware**: Automatically adapts to the system's light or dark mode.
-- 🎨 **Material You Support**: Leverages Android's dynamic theming for a native feel.
-- ⚡ **Optimized Performance**: Uses efficient hooks and memoization to minimize re-renders.
-- 🚀 **Simple API**: Easy integration with just a few lines of code.
+## Features  
 
-## Installation
+- 📱 **System-Aware**: Automatically adapts to the system's light or dark mode.  
+- 🎨 **Material You Support**: Leverages Android's dynamic theming for a native feel.  
+- ⚡ **Optimized Performance**: Uses efficient hooks and memoization to minimize re-renders.  
+- 🚀 **Simple API**: Easy integration with just a few lines of code.  
 
-Install the package using npm:
+## Installation  
 
-```sh
-npm install react-native-dynamic-theme
-```
+Install the package using npm:  
 
-## Usage
+```sh  
+npm install react-native-dynamic-theme  
+```  
 
-Import the necessary dependencies and use the library to retrieve the dynamic color scheme based on the system theme:
+## Usage  
 
-```tsx
-import { useMemo } from 'react';
-import { StyleSheet, Text, useColorScheme, View } from 'react-native';
-import {
-  getDynamicColorScheme,
-  type DynamicColorScheme,
-  type ColorScheme,
-} from 'react-native-dynamic-theme';
+Import the necessary dependencies and use the library to retrieve the dynamic color scheme based on the system theme:  
 
-const SampleUsage = () => {
-  const dynamicColorScheme = getDynamicColorScheme() as DynamicColorScheme;
-  const systemColorScheme = useColorScheme();
+```tsx  
+import { useMemo } from 'react';  
+import { StyleSheet, Text, useColorScheme, View } from 'react-native';  
+import {  
+  getDynamicColorScheme,  
+  type DynamicColorScheme,  
+  type ColorScheme,  
+} from 'react-native-dynamic-theme';  
 
-  const colors = useMemo<ColorScheme>(() => {
-    return systemColorScheme === 'dark'
-      ? dynamicColorScheme.dark
-      : dynamicColorScheme.light;
-  }, [systemColorScheme]);
+const SampleUsage = () => {  
+  const dynamicColorScheme = getDynamicColorScheme() as DynamicColorScheme;  
+  const systemColorScheme = useColorScheme();  
 
-  if (!dynamicColorScheme) {
-    return (
-      <View style={styles.container}>
-        <Text>iOS Device (not supported)</Text>
-      </View>
-    );
-  }
+  const colors = useMemo<ColorScheme>(() => {  
+    return systemColorScheme === 'dark'  
+      ? dynamicColorScheme.dark  
+      : dynamicColorScheme.light;  
+  }, [systemColorScheme]);  
 
-  return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <Text style={[styles.title, { color: colors.onBackground }]}>
-        Welcome to Dynamic Theme
-      </Text>
-      <Text style={[styles.subtitle, { color: colors.onSurface }]}>
-        This app dynamically adapts to your system theme.
-      </Text>
-      <View style={[styles.button, { backgroundColor: colors.primary }]}>
-        <Text style={[styles.buttonText, { color: colors.onPrimary }]}>
-          Get Started
-        </Text>
-      </View>
-    </View>
-  );
-};
+  if (!dynamicColorScheme) {  
+    return (  
+      <View style={styles.container}>  
+        <Text>iOS Device (not supported)</Text>  
+      </View>  
+    );  
+  }  
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 16,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    opacity: 0.7,
-    textAlign: 'center',
-    marginBottom: 16,
-  },
-  button: {
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    elevation: 4,
-  },
-  buttonText: {
-    fontWeight: 'bold',
-  },
-});
+  return (  
+    <View style={[styles.container, { backgroundColor: colors.background }]}>  
+      <Text style={[styles.title, { color: colors.onBackground }]}>  
+        Welcome to Dynamic Theme  
+      </Text>  
+      <Text style={[styles.subtitle, { color: colors.onSurface }]}>  
+        This app dynamically adapts to your system theme.  
+      </Text>  
+      <View style={[styles.button, { backgroundColor: colors.primary }]}>  
+        <Text style={[styles.buttonText, { color: colors.onPrimary }]}>  
+          Get Started  
+        </Text>  
+      </View>  
+    </View>  
+  );  
+};  
 
-export default SampleUsage;
-```
+const styles = StyleSheet.create({  
+  container: {  
+    flex: 1,  
+    alignItems: 'center',  
+    justifyContent: 'center',  
+    padding: 16,  
+  },  
+  title: {  
+    fontSize: 24,  
+    fontWeight: 'bold',  
+    marginBottom: 8,  
+  },  
+  subtitle: {  
+    fontSize: 16,  
+    opacity: 0.7,  
+    textAlign: 'center',  
+    marginBottom: 16,  
+  },  
+  button: {  
+    paddingVertical: 12,  
+    paddingHorizontal: 24,  
+    borderRadius: 8,  
+    elevation: 4,  
+  },  
+  buttonText: {  
+    fontWeight: 'bold',  
+  },  
+});  
 
-## Types
+export default SampleUsage;  
+```  
 
-### `ColorScheme`
+## Methods 📌  
 
-Represents the color scheme used in both light and dark modes.
+### `getDynamicColorScheme(): DynamicColorScheme | null`  
 
-```tsx
-type ColorScheme = {
-  primary: string;
-  onPrimary: string;
-  primaryContainer: string;
-  onPrimaryContainer: string;
-  inversePrimary: string;
-  secondary: string;
-  onSecondary: string;
-  secondaryContainer: string;
-  onSecondaryContainer: string;
-  tertiary: string;
-  onTertiary: string;
-  tertiaryContainer: string;
-  onTertiaryContainer: string;
-  background: string;
-  onBackground: string;
-  surface: string;
-  onSurface: string;
-  surfaceVariant: string;
-  onSurfaceVariant: string;
-  inverseSurface: string;
-  inverseOnSurface: string;
-  outline: string;
-  outlineVariant: string;
-  surfaceBright: string;
-  surfaceDim: string;
-  surfaceContainer: string;
-  surfaceContainerHigh: string;
-  surfaceContainerHighest: string;
-  surfaceContainerLow: string;
-  surfaceContainerLowest: string;
-  surfaceTint: string;
-};
-```
+Retrieves the dynamic color scheme based on the system's theme.  
 
-### `DynamicColorScheme`
+#### **Returns**  
+- A `DynamicColorScheme` object containing **light** and **dark** mode colors.  
+- Returns `null` on unsupported platforms (e.g., iOS).  
 
-Defines the dynamic color scheme containing both light and dark mode configurations.
+#### **Example Usage**  
 
-```tsx
-type DynamicColorScheme = {
-  light: ColorScheme;
-  dark: ColorScheme;
-};
-```
+```tsx  
+import { getDynamicColorScheme } from 'react-native-dynamic-theme';  
 
-## Roadmap 🛤️
+const dynamicColors = getDynamicColorScheme();  
 
-- ✅ Initial Release
-- 🚀 Support for iOS (Planned)
-- 🌈 Custom Theme Overrides
-- 🔌 Expo Compatibility
+if (dynamicColors) {  
+  console.log(dynamicColors.light.primary); // Light mode primary color  
+  console.log(dynamicColors.dark.primary);  // Dark mode primary color  
+} else {  
+  console.log("Dynamic theming not supported on this device.");  
+}  
+```  
 
-## Contributing
+#### **Behavior**  
+- On **Android 12+**, it fetches colors from the system’s **Material You** theme.  
+- On **older Android versions**, it falls back to predefined light and dark themes.  
+- On **iOS**, it returns `null` (iOS support planned in future updates).  
 
-We welcome contributions! To get started, check out our [contributing guide](CONTRIBUTING.md).
+## Types  
 
-## License
+### `ColorScheme`  
 
-This project is licensed under the MIT License.
+Represents the color scheme used in both light and dark modes.  
+
+```tsx  
+type ColorScheme = {  
+  primary: string;  
+  onPrimary: string;  
+  primaryContainer: string;  
+  onPrimaryContainer: string;  
+  inversePrimary: string;  
+  secondary: string;  
+  onSecondary: string;  
+  secondaryContainer: string;  
+  onSecondaryContainer: string;  
+  tertiary: string;  
+  onTertiary: string;  
+  tertiaryContainer: string;  
+  onTertiaryContainer: string;  
+  background: string;  
+  onBackground: string;  
+  surface: string;  
+  onSurface: string;  
+  surfaceVariant: string;  
+  onSurfaceVariant: string;  
+  inverseSurface: string;  
+  inverseOnSurface: string;  
+  outline: string;  
+  outlineVariant: string;  
+  surfaceBright: string;  
+  surfaceDim: string;  
+  surfaceContainer: string;  
+  surfaceContainerHigh: string;  
+  surfaceContainerHighest: string;  
+  surfaceContainerLow: string;  
+  surfaceContainerLowest: string;  
+  surfaceTint: string;  
+};  
+```  
+
+### `DynamicColorScheme`  
+
+Defines the dynamic color scheme containing both light and dark mode configurations.  
+
+```tsx  
+type DynamicColorScheme = {  
+  light: ColorScheme;  
+  dark: ColorScheme;  
+};  
+```  
+
+## Roadmap 🛤️  
+
+- ✅ Initial Release  
+- 🚀 Support for iOS (Planned)  
+- 🌈 Custom Theme Overrides  
+- 🔌 Expo Compatibility  
+
+## Contributing  
+
+We welcome contributions! To get started, check out our [contributing guide](CONTRIBUTING.md).  
+
+## License  
+
+This project is licensed under the MIT License.  
 
 ---
 
 Built with ❤️ and [create-react-native-library](https://github.com/callstack/react-native-builder-bob).
+
+---
+
+### 🚀 What's New in This Update?
+
+- 🔹 **Enhanced Methods section** with a clear explanation, return type, and example.
+- 🔹 **Better structure & readability** for improved developer experience.
+- 🔹 **Explicit platform behavior** (Android 12+, older Android, iOS).
+- 🔹 **Error handling for unsupported platforms** (e.g., iOS).
+
+This version is ready for publishing! Let me know if you need any final tweaks. 🚀
