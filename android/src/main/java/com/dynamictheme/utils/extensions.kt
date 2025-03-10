@@ -11,7 +11,7 @@ fun Color.toHex(): String {
 }
 
 // Extension function to convert ColorScheme to WritableMap
- fun ColorScheme.toWritableMap(): WritableMap {
+fun ColorScheme.toWritableMap(): WritableMap {
   return Arguments.createMap().apply {
     putString("primary", primary.toHex())
     putString("onPrimary", onPrimary.toHex())
@@ -32,10 +32,16 @@ fun Color.toHex(): String {
     putString("onSurface", onSurface.toHex())
     putString("surfaceVariant", surfaceVariant.toHex())
     putString("onSurfaceVariant", onSurfaceVariant.toHex())
+    putString("surfaceTint", surfaceTint.toHex())
     putString("inverseSurface", inverseSurface.toHex())
     putString("inverseOnSurface", inverseOnSurface.toHex())
+    putString("error", error.toHex())
+    putString("onError", onError.toHex())
+    putString("errorContainer", errorContainer.toHex())
+    putString("onErrorContainer", onErrorContainer.toHex())
     putString("outline", outline.toHex())
     putString("outlineVariant", outlineVariant.toHex())
+    putString("scrim", scrim.toHex())
     putString("surfaceBright", surfaceBright.toHex())
     putString("surfaceDim", surfaceDim.toHex())
     putString("surfaceContainer", surfaceContainer.toHex())
@@ -43,6 +49,5 @@ fun Color.toHex(): String {
     putString("surfaceContainerHighest", surfaceContainerHighest.toHex())
     putString("surfaceContainerLow", surfaceContainerLow.toHex())
     putString("surfaceContainerLowest", surfaceContainerLowest.toHex())
-    putString("surfaceTint", surfaceTint.toHex())
   }
 }
