@@ -1,7 +1,7 @@
 import type { TurboModule } from 'react-native';
 import { TurboModuleRegistry } from 'react-native';
 
-export type ColorScheme = {
+export interface ColorScheme {
   primary: string;
   onPrimary: string;
   primaryContainer: string;
@@ -38,12 +38,12 @@ export type ColorScheme = {
   surfaceContainerHighest: string;
   surfaceContainerLow: string;
   surfaceContainerLowest: string;
-};
+}
 
-export type DynamicColorScheme = {
+export interface DynamicColorScheme {
   light: ColorScheme;
   dark: ColorScheme;
-};
+}
 
 export interface Spec extends TurboModule {
   getDynamicColorScheme(): DynamicColorScheme;
