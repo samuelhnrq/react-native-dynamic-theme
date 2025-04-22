@@ -8,7 +8,6 @@ import {
   Switch,
   StatusBar,
   TextInput,
-  Platform,
   Alert,
 } from 'react-native';
 import {
@@ -21,14 +20,12 @@ import {
   Component,
   Palette,
   Sparkles,
-  ChevronRight,
   Settings,
   Bell,
   Search,
   User,
   Heart,
   Mail,
-  Phone,
   Calendar,
 } from 'lucide-react-native';
 
@@ -82,12 +79,6 @@ export default function MaterialYouShowcase() {
   const colors = isDarkMode
     ? completeTheme.schemes.dark
     : completeTheme.schemes.light;
-
-  const generateNewRandomColor = () => {
-    const newColor = generateRandomColor();
-    setSourceColor(newColor);
-    setInputColor(newColor);
-  };
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>

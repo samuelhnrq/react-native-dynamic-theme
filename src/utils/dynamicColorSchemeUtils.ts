@@ -6,10 +6,7 @@ import {
 } from '@material/material-color-utilities';
 import type { ColorScheme, DynamicColorScheme } from '../NativeDynamicTheme';
 import { CONTRAST_LEVEL } from '../constants/dynamicColorSchemeConstants';
-import type {
-  AdditionalDynamicColorSchemes,
-  ExtendedDynamicColorScheme,
-} from '../types/colorSchemeTypes';
+import type { AdditionalDynamicColorSchemes } from '../types/colorSchemeTypes';
 
 const convertDynamicSchemeTohex = (scheme: SchemeTonalSpot): ColorScheme => {
   return {
