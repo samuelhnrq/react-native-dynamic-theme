@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Text,
   View,
@@ -9,6 +9,8 @@ import {
   StatusBar,
   TextInput,
   Alert,
+  Animated,
+  Easing,
 } from 'react-native';
 import {
   getDynamicColorScheme,
@@ -27,6 +29,17 @@ import {
   Heart,
   Mail,
   Calendar,
+  Check,
+  X,
+  AlertTriangle,
+  Info,
+  Star,
+  Menu,
+  Download,
+  Plus,
+  Minus,
+  RefreshCcw,
+  Loader,
 } from 'lucide-react-native';
 
 // Random color generator
@@ -52,13 +65,37 @@ const PRESET_COLORS = [
 ];
 
 type TabName = 'Overview' | 'Components' | 'Palettes' | 'Generator';
-
 export default function MaterialYouShowcase() {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [activeTab, setActiveTab] = useState<TabName>('Overview');
   const [sourceColor, setSourceColor] = useState('#006971');
-  const [useDeviceScheme, setUseDeviceScheme] = useState(false);
+  const [useDeviceScheme, setUseDeviceScheme] = useState(true);
   const [inputColor, setInputColor] = useState('#006971');
+  const [spinValue] = useState(new Animated.Value(0));
+  const [sliderValue] = useState(50);
+  const [switchValues, setSwitchValues] = useState([false, true, false]);
+  const [counter, setCounter] = useState(3);
+
+  // Start spinner animation for progress indicators
+  useEffect(() => {
+    const startRotation = () => {
+      Animated.loop(
+        Animated.timing(spinValue, {
+          toValue: 1,
+          duration: 2000,
+          easing: Easing.linear,
+          useNativeDriver: true,
+        })
+      ).start();
+    };
+    startRotation();
+  }, [spinValue]);
+
+  // Create animated rotation transform for spinner
+  const spin = spinValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '360deg'],
+  });
 
   const devicePalette = getDynamicColorScheme();
   const completeTheme =
@@ -80,6 +117,49 @@ export default function MaterialYouShowcase() {
     ? completeTheme.schemes.dark
     : completeTheme.schemes.light;
 
+  const toggleSwitch = (index: number) => {
+    const newValues = [...switchValues];
+    newValues[index] = !newValues[index];
+    setSwitchValues(newValues);
+  };
+  // Helper to render tonal palette
+  const renderTonalPalette = (paletteName: string) => {
+    const palette =
+      paletteName === 'neutral'
+        ? completeTheme.palettes.neutral
+        : paletteName === 'neutralVariant'
+          ? completeTheme.palettes.neutralVariant
+          : completeTheme.palettes[
+              paletteName as 'primary' | 'secondary' | 'tertiary' | 'error'
+            ];
+
+    return (
+      <View key={paletteName} style={styles.paletteSection}>
+        <Text style={[styles.paletteName, { color: colors.onSurface }]}>
+          {paletteName.charAt(0).toUpperCase() + paletteName.slice(1)}
+        </Text>
+        <View style={styles.tonalGrid}>
+          {[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99, 100].map((tone) => {
+            const backgroundColor =
+              palette?.[tone as keyof typeof palette] || '#000';
+
+            return (
+              <View key={tone} style={[styles.tonalBox, { backgroundColor }]}>
+                <Text
+                  style={[
+                    styles.tonalText,
+                    { color: tone > 50 ? '#000' : '#fff' },
+                  ]}
+                >
+                  {tone}
+                </Text>
+              </View>
+            );
+          })}
+        </View>
+      </View>
+    );
+  };
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <StatusBar
@@ -111,34 +191,17 @@ export default function MaterialYouShowcase() {
           />
         </View>
       </View>
-
       <ScrollView style={styles.content}>
         {activeTab === 'Overview' && (
           <>
-            {/* Source Color Display */}
+            {/* Complete Color Scheme Section */}
             <View style={styles.section}>
               <Text style={[styles.sectionTitle, { color: colors.onSurface }]}>
-                Source Color: {sourceColor}
-              </Text>
-              <View
-                style={[
-                  styles.sourceColorBox,
-                  { backgroundColor: sourceColor },
-                ]}
-              >
-                <Text style={[styles.sourceColorText, { color: '#FFFFFF' }]}>
-                  Current Source Color
-                </Text>
-              </View>
-            </View>
-
-            {/* Color Palette Section */}
-            <View style={styles.section}>
-              <Text style={[styles.sectionTitle, { color: colors.onSurface }]}>
-                Color Palette
+                Complete Color Scheme
               </Text>
               <View style={styles.colorGrid}>
                 {[
+                  // Main color scheme
                   {
                     name: 'Primary',
                     color: colors.primary,
@@ -179,6 +242,89 @@ export default function MaterialYouShowcase() {
                     color: colors.errorContainer,
                     text: colors.onErrorContainer,
                   },
+                  // Background and surface colors
+                  {
+                    name: 'Background',
+                    color: colors.background,
+                    text: colors.onBackground,
+                  },
+                  {
+                    name: 'Surface',
+                    color: colors.surface,
+                    text: colors.onSurface,
+                  },
+                  {
+                    name: 'SurfaceVariant',
+                    color: colors.surfaceVariant,
+                    text: colors.onSurfaceVariant,
+                  },
+                  {
+                    name: 'SurfaceDim',
+                    color: colors.surfaceDim,
+                    text: colors.onSurface,
+                  },
+                  {
+                    name: 'SurfaceBright',
+                    color: colors.surfaceBright,
+                    text: colors.onSurface,
+                  },
+                  {
+                    name: 'SurfaceContainerLowest',
+                    color: colors.surfaceContainerLowest,
+                    text: colors.onSurface,
+                  },
+                  {
+                    name: 'SurfaceContainerLow',
+                    color: colors.surfaceContainerLow,
+                    text: colors.onSurface,
+                  },
+                  {
+                    name: 'SurfaceContainer',
+                    color: colors.surfaceContainer,
+                    text: colors.onSurface,
+                  },
+                  {
+                    name: 'SurfaceContainerHigh',
+                    color: colors.surfaceContainerHigh,
+                    text: colors.onSurface,
+                  },
+                  {
+                    name: 'SurfaceContainerHighest',
+                    color: colors.surfaceContainerHighest,
+                    text: colors.onSurface,
+                  },
+                  // Extra colors
+                  {
+                    name: 'Outline',
+                    color: colors.outline,
+                    text: colors.background,
+                  },
+                  {
+                    name: 'OutlineVariant',
+                    color: colors.outlineVariant,
+                    text: colors.onBackground,
+                  },
+
+                  {
+                    name: 'Scrim',
+                    color: colors.scrim,
+                    text: '#FFFFFF',
+                  },
+                  {
+                    name: 'InverseSurface',
+                    color: colors.inverseSurface,
+                    text: colors.inverseOnSurface,
+                  },
+                  {
+                    name: 'InverseOnSurface',
+                    color: colors.inverseOnSurface,
+                    text: colors.inverseSurface,
+                  },
+                  {
+                    name: 'InversePrimary',
+                    color: colors.inversePrimary,
+                    text: colors.primaryContainer,
+                  },
                 ].map((item) => (
                   <View
                     key={item.name}
@@ -191,9 +337,23 @@ export default function MaterialYouShowcase() {
                 ))}
               </View>
             </View>
+
+            {/* Tonal Palettes from the Palettes tab */}
+            <View style={styles.section}>
+              <Text style={[styles.sectionTitle, { color: colors.onSurface }]}>
+                Complete Tonal Palettes
+              </Text>
+              {[
+                'primary',
+                'secondary',
+                'tertiary',
+                'error',
+                'neutral',
+                'neutralVariant',
+              ].map((palette) => renderTonalPalette(palette))}
+            </View>
           </>
         )}
-
         {activeTab === 'Components' && (
           <View style={styles.section}>
             <Text style={[styles.sectionTitle, { color: colors.onSurface }]}>
@@ -262,6 +422,504 @@ export default function MaterialYouShowcase() {
               </TouchableOpacity>
             </View>
 
+            {/* NEW: Progress Indicators Section */}
+            <Text
+              style={[
+                styles.componentSectionTitle,
+                { color: colors.onSurface },
+              ]}
+            >
+              Progress Indicators
+            </Text>
+            <View style={styles.progressSection}>
+              {/* Circular Progress */}
+              <View style={styles.progressRow}>
+                <View style={styles.progressItem}>
+                  <Animated.View
+                    style={[
+                      styles.circularProgress,
+                      {
+                        borderColor: colors.primary,
+                        transform: [{ rotate: spin }],
+                      },
+                    ]}
+                  />
+                  <Text
+                    style={[
+                      styles.progressLabel,
+                      { color: colors.onSurfaceVariant },
+                    ]}
+                  >
+                    Circular Progress
+                  </Text>
+                </View>
+
+                <View style={styles.progressItem}>
+                  <View style={styles.determineProgressContainer}>
+                    <View
+                      style={[
+                        styles.determinateProgress,
+                        {
+                          backgroundColor: colors.primary,
+                          width: `${sliderValue}%`,
+                        },
+                      ]}
+                    />
+                  </View>
+                  <Text
+                    style={[
+                      styles.progressLabel,
+                      { color: colors.onSurfaceVariant },
+                    ]}
+                  >
+                    Linear Progress: {sliderValue}%
+                  </Text>
+                </View>
+              </View>
+
+              {/* Multi-color progress */}
+              <View style={styles.progressRow}>
+                <View style={styles.progressItem}>
+                  <View style={styles.multiColorContainer}>
+                    <View
+                      style={[
+                        styles.multiColorSection,
+                        { flex: 0.2, backgroundColor: colors.primary },
+                      ]}
+                    />
+                    <View
+                      style={[
+                        styles.multiColorSection,
+                        { flex: 0.5, backgroundColor: colors.secondary },
+                      ]}
+                    />
+                    <View
+                      style={[
+                        styles.multiColorSection,
+                        { flex: 0.3, backgroundColor: colors.tertiary },
+                      ]}
+                    />
+                  </View>
+                  <Text
+                    style={[
+                      styles.progressLabel,
+                      { color: colors.onSurfaceVariant },
+                    ]}
+                  >
+                    Multi-color Progress
+                  </Text>
+                </View>
+
+                <View style={styles.progressItem}>
+                  <View
+                    style={[
+                      styles.progressCircle,
+                      { borderColor: colors.outline },
+                    ]}
+                  >
+                    <View
+                      style={[
+                        styles.progressFill,
+                        {
+                          backgroundColor: colors.primary,
+                          height: `${sliderValue}%`,
+                        },
+                      ]}
+                    />
+                  </View>
+                  <Text
+                    style={[
+                      styles.progressLabel,
+                      { color: colors.onSurfaceVariant },
+                    ]}
+                  >
+                    Vertical Progress
+                  </Text>
+                </View>
+              </View>
+            </View>
+            {/* NEW: Counter Component */}
+            <Text
+              style={[
+                styles.componentSectionTitle,
+                { color: colors.onSurface },
+              ]}
+            >
+              Counter
+            </Text>
+            <View style={styles.counterContainer}>
+              <TouchableOpacity
+                style={[
+                  styles.counterButton,
+                  { backgroundColor: colors.primary },
+                ]}
+                onPress={() => setCounter((prev) => Math.max(0, prev - 1))}
+              >
+                <Minus size={20} color={colors.onPrimary} />
+              </TouchableOpacity>
+
+              <View
+                style={[styles.counterValue, { borderColor: colors.outline }]}
+              >
+                <Text style={[styles.counterText, { color: colors.onSurface }]}>
+                  {counter}
+                </Text>
+              </View>
+
+              <TouchableOpacity
+                style={[
+                  styles.counterButton,
+                  { backgroundColor: colors.primary },
+                ]}
+                onPress={() => setCounter((prev) => prev + 1)}
+              >
+                <Plus size={20} color={colors.onPrimary} />
+              </TouchableOpacity>
+            </View>
+
+            {/* NEW: Spinner Variants */}
+            <Text
+              style={[
+                styles.componentSectionTitle,
+                { color: colors.onSurface },
+              ]}
+            >
+              Spinner Variants
+            </Text>
+            <View style={styles.spinnerContainer}>
+              <View style={styles.spinnerRow}>
+                {/* Simple spinner */}
+                <View style={styles.spinnerItem}>
+                  <Animated.View
+                    style={[
+                      styles.spinnerSmall,
+                      {
+                        borderColor: colors.primary,
+                        borderLeftColor: 'transparent',
+                        transform: [{ rotate: spin }],
+                      },
+                    ]}
+                  />
+                  <Text
+                    style={[
+                      styles.spinnerLabel,
+                      { color: colors.onSurfaceVariant },
+                    ]}
+                  >
+                    Small
+                  </Text>
+                </View>
+
+                {/* Medium spinner */}
+                <View style={styles.spinnerItem}>
+                  <Animated.View
+                    style={[
+                      styles.spinnerMedium,
+                      {
+                        borderColor: colors.secondary,
+                        borderLeftColor: 'transparent',
+                        transform: [{ rotate: spin }],
+                      },
+                    ]}
+                  />
+                  <Text
+                    style={[
+                      styles.spinnerLabel,
+                      { color: colors.onSurfaceVariant },
+                    ]}
+                  >
+                    Medium
+                  </Text>
+                </View>
+
+                {/* Large spinner */}
+                <View style={styles.spinnerItem}>
+                  <Animated.View
+                    style={[
+                      styles.spinnerLarge,
+                      {
+                        borderColor: colors.tertiary,
+                        borderLeftColor: 'transparent',
+                        transform: [{ rotate: spin }],
+                      },
+                    ]}
+                  />
+                  <Text
+                    style={[
+                      styles.spinnerLabel,
+                      { color: colors.onSurfaceVariant },
+                    ]}
+                  >
+                    Large
+                  </Text>
+                </View>
+              </View>
+
+              <View style={styles.spinnerRow}>
+                {/* Icon spinners */}
+                <View style={styles.spinnerItem}>
+                  <Animated.View style={{ transform: [{ rotate: spin }] }}>
+                    <RefreshCcw size={24} color={colors.primary} />
+                  </Animated.View>
+                  <Text
+                    style={[
+                      styles.spinnerLabel,
+                      { color: colors.onSurfaceVariant },
+                    ]}
+                  >
+                    Icon 1
+                  </Text>
+                </View>
+
+                <View style={styles.spinnerItem}>
+                  <Animated.View style={{ transform: [{ rotate: spin }] }}>
+                    <Loader size={24} color={colors.secondary} />
+                  </Animated.View>
+                  <Text
+                    style={[
+                      styles.spinnerLabel,
+                      { color: colors.onSurfaceVariant },
+                    ]}
+                  >
+                    Icon 2
+                  </Text>
+                </View>
+
+                {/* Pulsing spinner */}
+                <View style={styles.spinnerItem}>
+                  <View
+                    style={[
+                      styles.pulsingContainer,
+                      { borderColor: colors.tertiary },
+                    ]}
+                  >
+                    <View
+                      style={[
+                        styles.pulsingInner,
+                        { backgroundColor: colors.tertiary },
+                      ]}
+                    />
+                  </View>
+                  <Text
+                    style={[
+                      styles.spinnerLabel,
+                      { color: colors.onSurfaceVariant },
+                    ]}
+                  >
+                    Pulsing
+                  </Text>
+                </View>
+              </View>
+            </View>
+            {/* NEW: Notification badges */}
+            <Text
+              style={[
+                styles.componentSectionTitle,
+                { color: colors.onSurface },
+              ]}
+            >
+              Badges
+            </Text>
+            <View style={styles.badgesContainer}>
+              <View style={styles.badgeItem}>
+                <View
+                  style={[
+                    styles.badgeIcon,
+                    { backgroundColor: colors.surfaceContainerHigh },
+                  ]}
+                >
+                  <Mail size={24} color={colors.onSurface} />
+                  <View
+                    style={[styles.badge, { backgroundColor: colors.error }]}
+                  >
+                    <Text style={[styles.badgeText, { color: colors.onError }]}>
+                      3
+                    </Text>
+                  </View>
+                </View>
+                <Text
+                  style={[
+                    styles.badgeLabel,
+                    { color: colors.onSurfaceVariant },
+                  ]}
+                >
+                  Number Badge
+                </Text>
+              </View>
+
+              <View style={styles.badgeItem}>
+                <View
+                  style={[
+                    styles.badgeIcon,
+                    { backgroundColor: colors.surfaceContainerHigh },
+                  ]}
+                >
+                  <Bell size={24} color={colors.onSurface} />
+                  <View
+                    style={[styles.dotBadge, { backgroundColor: colors.error }]}
+                  />
+                </View>
+                <Text
+                  style={[
+                    styles.badgeLabel,
+                    { color: colors.onSurfaceVariant },
+                  ]}
+                >
+                  Dot Badge
+                </Text>
+              </View>
+
+              <View style={styles.badgeItem}>
+                <View
+                  style={[
+                    styles.badgeIcon,
+                    { backgroundColor: colors.surfaceContainerHigh },
+                  ]}
+                >
+                  <Settings size={24} color={colors.onSurface} />
+                  <View
+                    style={[
+                      styles.largeBadge,
+                      { backgroundColor: colors.tertiary },
+                    ]}
+                  >
+                    <Text
+                      style={[styles.badgeText, { color: colors.onTertiary }]}
+                    >
+                      NEW
+                    </Text>
+                  </View>
+                </View>
+                <Text
+                  style={[
+                    styles.badgeLabel,
+                    { color: colors.onSurfaceVariant },
+                  ]}
+                >
+                  Text Badge
+                </Text>
+              </View>
+            </View>
+
+            {/* NEW: Status Indicators */}
+            <Text
+              style={[
+                styles.componentSectionTitle,
+                { color: colors.onSurface },
+              ]}
+            >
+              Status Indicators
+            </Text>
+            <View style={styles.statusContainer}>
+              <View
+                style={[
+                  styles.statusItem,
+                  { backgroundColor: colors.surfaceContainerLow },
+                ]}
+              >
+                <View
+                  style={[
+                    styles.statusIconContainer,
+                    { backgroundColor: colors.primaryContainer },
+                  ]}
+                >
+                  <Check size={18} color={colors.onPrimaryContainer} />
+                </View>
+                <Text style={[styles.statusText, { color: colors.onSurface }]}>
+                  Success Status
+                </Text>
+              </View>
+
+              <View
+                style={[
+                  styles.statusItem,
+                  { backgroundColor: colors.surfaceContainerLow },
+                ]}
+              >
+                <View
+                  style={[
+                    styles.statusIconContainer,
+                    { backgroundColor: colors.errorContainer },
+                  ]}
+                >
+                  <X size={18} color={colors.onErrorContainer} />
+                </View>
+                <Text style={[styles.statusText, { color: colors.onSurface }]}>
+                  Error Status
+                </Text>
+              </View>
+
+              <View
+                style={[
+                  styles.statusItem,
+                  { backgroundColor: colors.surfaceContainerLow },
+                ]}
+              >
+                <View
+                  style={[
+                    styles.statusIconContainer,
+                    { backgroundColor: colors.tertiaryContainer },
+                  ]}
+                >
+                  <AlertTriangle size={18} color={colors.onTertiaryContainer} />
+                </View>
+                <Text style={[styles.statusText, { color: colors.onSurface }]}>
+                  Warning Status
+                </Text>
+              </View>
+
+              <View
+                style={[
+                  styles.statusItem,
+                  { backgroundColor: colors.surfaceContainerLow },
+                ]}
+              >
+                <View
+                  style={[
+                    styles.statusIconContainer,
+                    { backgroundColor: colors.secondaryContainer },
+                  ]}
+                >
+                  <Info size={18} color={colors.onSecondaryContainer} />
+                </View>
+                <Text style={[styles.statusText, { color: colors.onSurface }]}>
+                  Info Status
+                </Text>
+              </View>
+            </View>
+
+            {/* NEW: Toggles/Switches Section */}
+            <Text
+              style={[
+                styles.componentSectionTitle,
+                { color: colors.onSurface },
+              ]}
+            >
+              Toggle Components
+            </Text>
+            <View style={styles.togglesContainer}>
+              {switchValues.map((value, index) => (
+                <View key={index} style={styles.toggleItem}>
+                  <Switch
+                    value={value}
+                    onValueChange={() => toggleSwitch(index)}
+                    trackColor={{
+                      false: colors.surfaceVariant,
+                      true: colors.primaryContainer,
+                    }}
+                    thumbColor={value ? colors.primary : colors.outline}
+                  />
+                  <Text
+                    style={[
+                      styles.toggleLabel,
+                      { color: colors.onSurfaceVariant },
+                    ]}
+                  >
+                    Toggle {index + 1} {value ? 'ON' : 'OFF'}
+                  </Text>
+                </View>
+              ))}
+            </View>
             {/* FABs Section */}
             <Text
               style={[
@@ -348,6 +1006,76 @@ export default function MaterialYouShowcase() {
               </View>
             </View>
 
+            {/* NEW: Rating component */}
+            <Text
+              style={[
+                styles.componentSectionTitle,
+                { color: colors.onSurface },
+              ]}
+            >
+              Rating
+            </Text>
+            <View style={styles.ratingContainer}>
+              <View style={styles.starsRow}>
+                {[1, 2, 3, 4, 5].map((rating) => (
+                  <Star
+                    key={rating}
+                    size={24}
+                    fill={rating <= 3 ? colors.tertiary : 'transparent'}
+                    color={rating <= 3 ? colors.tertiary : colors.outline}
+                  />
+                ))}
+              </View>
+              <Text
+                style={[styles.ratingText, { color: colors.onSurfaceVariant }]}
+              >
+                3.0 / 5.0
+              </Text>
+            </View>
+
+            {/* NEW: Menu component */}
+            <Text
+              style={[
+                styles.componentSectionTitle,
+                { color: colors.onSurface },
+              ]}
+            >
+              Menu Component
+            </Text>
+            <View
+              style={[
+                styles.menuCard,
+                { backgroundColor: colors.surfaceContainer },
+              ]}
+            >
+              <View style={styles.menuHeader}>
+                <Text style={[styles.menuTitle, { color: colors.onSurface }]}>
+                  Menu Items
+                </Text>
+                <Menu size={22} color={colors.onSurfaceVariant} />
+              </View>
+              <View
+                style={[
+                  styles.menuDivider,
+                  { backgroundColor: colors.outlineVariant },
+                ]}
+              />
+              {[
+                'Profile Settings',
+                'Notifications',
+                'Privacy',
+                'Help & Support',
+              ].map((item, index) => (
+                <TouchableOpacity key={index} style={styles.menuItem}>
+                  <Text
+                    style={[styles.menuItemText, { color: colors.onSurface }]}
+                  >
+                    {item}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+
             {/* Cards Section */}
             <Text
               style={[
@@ -420,6 +1148,74 @@ export default function MaterialYouShowcase() {
                   This is an outlined card with border styling.
                 </Text>
               </View>
+
+              {/* NEW: Action Card */}
+              <View
+                style={[
+                  styles.actionCard,
+                  { backgroundColor: colors.surfaceContainer },
+                ]}
+              >
+                <View style={styles.actionCardHeader}>
+                  <Text style={[styles.cardTitle, { color: colors.onSurface }]}>
+                    Action Card
+                  </Text>
+                  <View
+                    style={[
+                      styles.cardAvatarBadge,
+                      { backgroundColor: colors.tertiaryContainer },
+                    ]}
+                  >
+                    <User size={20} color={colors.onTertiaryContainer} />
+                  </View>
+                </View>
+                <Text
+                  style={[
+                    styles.cardContent,
+                    { color: colors.onSurfaceVariant },
+                  ]}
+                >
+                  This card has action buttons in the footer area.
+                </Text>
+                <View
+                  style={[
+                    styles.cardDivider,
+                    { backgroundColor: colors.outlineVariant },
+                  ]}
+                />
+                <View style={styles.actionCardFooter}>
+                  <TouchableOpacity
+                    style={[
+                      styles.actionButton,
+                      { borderColor: colors.outline },
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.actionButtonText,
+                        { color: colors.primary },
+                      ]}
+                    >
+                      Cancel
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      styles.actionButton,
+                      { backgroundColor: colors.primary },
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.actionButtonText,
+                        { color: colors.onPrimary },
+                      ]}
+                    >
+                      Confirm
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
             </View>
 
             {/* Chips Section */}
@@ -480,8 +1276,37 @@ export default function MaterialYouShowcase() {
                   Suggestion
                 </Text>
               </View>
-            </View>
 
+              {/* NEW: More Chip Types */}
+              <View
+                style={[styles.outlineChip, { borderColor: colors.outline }]}
+              >
+                <Text style={[styles.chipText, { color: colors.onSurface }]}>
+                  Outlined
+                </Text>
+              </View>
+
+              <View
+                style={[
+                  styles.elevatedChip,
+                  {
+                    backgroundColor: colors.surface,
+                    shadowColor: '#000',
+                  },
+                ]}
+              >
+                <Text style={[styles.chipText, { color: colors.onSurface }]}>
+                  Elevated
+                </Text>
+              </View>
+
+              <View style={[styles.chip, { backgroundColor: colors.primary }]}>
+                <Download size={16} color={colors.onPrimary} />
+                <Text style={[styles.chipText, { color: colors.onPrimary }]}>
+                  Action
+                </Text>
+              </View>
+            </View>
             {/* Input Fields Section */}
             <Text
               style={[
@@ -541,6 +1366,34 @@ export default function MaterialYouShowcase() {
                   placeholderTextColor={colors.onSurfaceVariant}
                 />
               </View>
+
+              {/* NEW: TextArea component */}
+              <View
+                style={[
+                  styles.textArea,
+                  {
+                    backgroundColor: colors.surfaceContainerHighest,
+                  },
+                ]}
+              >
+                <Text
+                  style={[styles.textFieldLabel, { color: colors.primary }]}
+                >
+                  Description
+                </Text>
+                <TextInput
+                  style={[
+                    styles.textAreaInput,
+                    {
+                      color: colors.onSurface,
+                    },
+                  ]}
+                  placeholder="Enter longer text here..."
+                  placeholderTextColor={colors.onSurfaceVariant}
+                  multiline={true}
+                  numberOfLines={4}
+                />
+              </View>
             </View>
 
             {/* Search Bar Section */}
@@ -574,7 +1427,6 @@ export default function MaterialYouShowcase() {
             </View>
           </View>
         )}
-
         {activeTab === 'Palettes' && (
           <View style={styles.section}>
             <Text style={[styles.sectionTitle, { color: colors.onSurface }]}>
@@ -587,52 +1439,7 @@ export default function MaterialYouShowcase() {
               'error',
               'neutral',
               'neutralVariant',
-            ].map((palette) => (
-              <View key={palette} style={styles.paletteSection}>
-                <Text style={[styles.paletteName, { color: colors.onSurface }]}>
-                  {palette.charAt(0).toUpperCase() + palette.slice(1)}
-                </Text>
-                <View style={styles.tonalGrid}>
-                  {[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99, 100].map(
-                    (tone) => {
-                      // Fix TypeScript error by properly accessing the palette
-                      const paletteData =
-                        palette === 'neutral'
-                          ? completeTheme.palettes.neutral
-                          : palette === 'neutralVariant'
-                            ? completeTheme.palettes.neutralVariant
-                            : completeTheme.palettes[
-                                palette as
-                                  | 'primary'
-                                  | 'secondary'
-                                  | 'tertiary'
-                                  | 'error'
-                              ];
-
-                      const backgroundColor =
-                        paletteData?.[tone as keyof typeof paletteData] ||
-                        '#000';
-
-                      return (
-                        <View
-                          key={tone}
-                          style={[styles.tonalBox, { backgroundColor }]}
-                        >
-                          <Text
-                            style={[
-                              styles.tonalText,
-                              { color: tone > 50 ? '#000' : '#fff' },
-                            ]}
-                          >
-                            {tone}
-                          </Text>
-                        </View>
-                      );
-                    }
-                  )}
-                </View>
-              </View>
-            ))}
+            ].map((palette) => renderTonalPalette(palette))}
           </View>
         )}
 
@@ -803,7 +1610,6 @@ export default function MaterialYouShowcase() {
           </View>
         )}
       </ScrollView>
-
       {/* Material 3 Bottom Navigation */}
       <View
         style={[styles.bottomNav, { backgroundColor: colors.surfaceContainer }]}
@@ -1107,6 +1913,32 @@ const styles = StyleSheet.create({
     marginRight: 8,
     marginBottom: 8,
   },
+  outlineChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+    marginRight: 8,
+    marginBottom: 8,
+    borderWidth: 1,
+  },
+  elevatedChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+    marginRight: 8,
+    marginBottom: 8,
+    elevation: 2,
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+  },
   chipText: {
     fontSize: 14,
     marginLeft: 8,
@@ -1132,6 +1964,17 @@ const styles = StyleSheet.create({
   textFieldInput: {
     fontSize: 16,
     padding: 0,
+  },
+  textArea: {
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 16,
+  },
+  textAreaInput: {
+    fontSize: 16,
+    padding: 0,
+    height: 80,
+    textAlignVertical: 'top',
   },
   searchBar: {
     flexDirection: 'row',
@@ -1276,5 +2119,310 @@ const styles = StyleSheet.create({
   tonalText: {
     fontSize: 8,
     fontWeight: '500',
+  },
+  // NEW STYLES for progress indicators
+  progressSection: {
+    marginBottom: 24,
+  },
+  progressRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 16,
+  },
+  progressItem: {
+    alignItems: 'center',
+    width: '48%',
+  },
+  circularProgress: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    borderWidth: 4,
+    borderTopColor: 'transparent',
+    borderRightColor: 'transparent',
+  },
+  progressLabel: {
+    marginTop: 8,
+    fontSize: 12,
+  },
+  determineProgressContainer: {
+    width: '100%',
+    height: 8,
+    backgroundColor: 'rgba(0,0,0,0.1)',
+    borderRadius: 4,
+    overflow: 'hidden',
+  },
+  determinateProgress: {
+    height: '100%',
+  },
+  multiColorContainer: {
+    width: '100%',
+    height: 8,
+    borderRadius: 4,
+    flexDirection: 'row',
+    overflow: 'hidden',
+  },
+  multiColorSection: {
+    height: '100%',
+  },
+  progressCircle: {
+    width: 48,
+    height: 100,
+    borderWidth: 1,
+    borderRadius: 8,
+    overflow: 'hidden',
+    justifyContent: 'flex-end',
+  },
+  progressFill: {
+    width: '100%',
+  },
+
+  // NEW STYLES for badges
+  badgesContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 24,
+  },
+  badgeItem: {
+    alignItems: 'center',
+  },
+  badgeIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+  },
+  badge: {
+    minWidth: 20,
+    height: 20,
+    borderRadius: 10,
+    position: 'absolute',
+    top: -5,
+    right: -5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 4,
+  },
+  dotBadge: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    position: 'absolute',
+    top: 0,
+    right: 0,
+  },
+  largeBadge: {
+    minWidth: 32,
+    height: 20,
+    borderRadius: 10,
+    position: 'absolute',
+    top: -10,
+    right: -10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 6,
+  },
+  badgeText: {
+    fontSize: 10,
+    fontWeight: 'bold',
+  },
+  badgeLabel: {
+    marginTop: 8,
+    fontSize: 12,
+  },
+
+  // NEW STYLES for status indicators
+  statusContainer: {
+    marginBottom: 24,
+  },
+  statusItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 8,
+  },
+  statusIconContainer: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  statusText: {
+    fontSize: 14,
+    fontWeight: '500',
+  },
+
+  // NEW STYLES for rating
+  ratingContainer: {
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  starsRow: {
+    flexDirection: 'row',
+    marginBottom: 8,
+  },
+  ratingText: {
+    fontSize: 14,
+  },
+
+  // NEW STYLES for toggles
+  togglesContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 24,
+  },
+  toggleItem: {
+    alignItems: 'center',
+  },
+  toggleLabel: {
+    marginTop: 8,
+    fontSize: 12,
+  },
+
+  // NEW STYLES for menu
+  menuCard: {
+    borderRadius: 12,
+    overflow: 'hidden',
+    marginBottom: 24,
+  },
+  menuHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 16,
+  },
+  menuTitle: {
+    fontSize: 16,
+    fontWeight: '500',
+  },
+  menuDivider: {
+    height: 1,
+    width: '100%',
+  },
+  menuItem: {
+    padding: 16,
+  },
+  menuItemText: {
+    fontSize: 14,
+  },
+  // NEW STYLES for action card
+  actionCard: {
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 16,
+  },
+  actionCardHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  cardAvatarBadge: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  cardDivider: {
+    height: 1,
+    marginVertical: 12,
+  },
+  actionCardFooter: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginTop: 8,
+  },
+  actionButton: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    marginLeft: 8,
+    borderWidth: 1,
+  },
+  actionButtonText: {
+    fontSize: 14,
+    fontWeight: '500',
+  },
+
+  // NEW STYLES for counter
+  counterContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  counterButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  counterValue: {
+    width: 60,
+    height: 40,
+    borderWidth: 1,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: 16,
+  },
+  counterText: {
+    fontSize: 18,
+    fontWeight: '500',
+  },
+
+  // NEW STYLES for spinners
+  spinnerContainer: {
+    marginBottom: 24,
+  },
+  spinnerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 16,
+  },
+  spinnerItem: {
+    alignItems: 'center',
+  },
+  spinnerSmall: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    borderWidth: 2,
+  },
+  spinnerMedium: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    borderWidth: 3,
+  },
+  spinnerLarge: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    borderWidth: 4,
+  },
+  spinnerLabel: {
+    marginTop: 8,
+    fontSize: 12,
+  },
+  pulsingContainer: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    borderWidth: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  pulsingInner: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
   },
 });

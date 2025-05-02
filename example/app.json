@@ -1,4 +1,9 @@
 {
   "name": "DynamicThemeExample",
-  "displayName": "DynamicThemeExample"
+  "displayName": "DynamicThemeExample",
+  "extra": {
+    "eas": {
+      "projectId": "310feb72-1e97-4158-b151-c4689d86d1e1"
+    }
+  }
 }
