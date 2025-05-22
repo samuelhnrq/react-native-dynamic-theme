@@ -60,7 +60,7 @@ buck-out/
 \.buckd/
 android/app/libs
 android/keystores/debug.keystore
-
+android/app/release
 # Yarn
 .yarn/*
 !.yarn/patches
@@ -84,3 +84,6 @@ android/generated
 
 # React Native Nitro Modules
 nitrogen/
+# example android app 
+example/android/app/release/
+example/android/build/

@@ -11,6 +11,7 @@ import {
   Alert,
   Animated,
   Easing,
+  Platform,
 } from 'react-native';
 import {
   getDynamicColorScheme,
@@ -41,7 +42,10 @@ import {
   RefreshCcw,
   Loader,
 } from 'lucide-react-native';
-
+import {
+  SafeAreaProvider,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 // Random color generator
 const generateRandomColor = () => {
   const letters = '0123456789ABCDEF';
@@ -65,7 +69,9 @@ const PRESET_COLORS = [
 ];
 
 type TabName = 'Overview' | 'Components' | 'Palettes' | 'Generator';
-export default function MaterialYouShowcase() {
+function MaterialYouShowcase() {
+  const { top, bottom, left, right } = useSafeAreaInsets();
+
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [activeTab, setActiveTab] = useState<TabName>('Overview');
   const [sourceColor, setSourceColor] = useState('#006971');
@@ -161,16 +167,29 @@ export default function MaterialYouShowcase() {
     );
   };
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor: colors.background,
+          paddingLeft: left,
+          paddingRight: right,
+        },
+      ]}
+    >
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={colors.surfaceContainerHigh}
+        translucent
       />
 
       <View
         style={[
           styles.appBar,
-          { backgroundColor: colors.surfaceContainerHigh },
+          {
+            backgroundColor: colors.surfaceContainerHigh,
+            paddingTop: Platform.OS === 'ios' ? top : top + 24,
+          },
         ]}
       >
         <Text style={[styles.appBarTitle, { color: colors.onSurface }]}>
@@ -1612,7 +1631,10 @@ export default function MaterialYouShowcase() {
       </ScrollView>
       {/* Material 3 Bottom Navigation */}
       <View
-        style={[styles.bottomNav, { backgroundColor: colors.surfaceContainer }]}
+        style={[
+          styles.bottomNav,
+          { backgroundColor: colors.surfaceContainer, paddingBottom: bottom },
+        ]}
       >
         {[
           { name: 'Overview', icon: LayoutGrid },
@@ -1666,17 +1688,24 @@ export default function MaterialYouShowcase() {
   );
 }
 
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <MaterialYouShowcase />
+    </SafeAreaProvider>
+  );
+}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
   appBar: {
-    height: 64,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     elevation: 4,
+    paddingBottom: 24,
   },
   appBarTitle: {
     fontSize: 20,
@@ -1692,7 +1721,6 @@ const styles = StyleSheet.create({
   },
   bottomNav: {
     flexDirection: 'row',
-    height: 80,
     elevation: 8,
     borderTopWidth: 1,
     borderTopColor: 'rgba(0,0,0,0.1)',
