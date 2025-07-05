@@ -1,6 +1,6 @@
 {
   "name": "react-native-dynamic-theme",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "A React Native library to retrieve the dynamic theme from android devices",
   "source": "./src/index.tsx",
   "main": "./lib/commonjs/index.js",
