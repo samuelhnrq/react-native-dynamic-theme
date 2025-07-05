@@ -5,48 +5,78 @@ import styles from './styles.module.css';
 
 type FeatureItem = {
   title: string;
-  Svg: React.ComponentType<React.ComponentProps<'svg'>>;
+  icon: string;
   description: ReactNode;
 };
 
 const FeatureList: FeatureItem[] = [
   {
-    title: 'Easy to Use',
-    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
-    description: (
-      <>
-        React Native Dynamic Theme is designed to be easily integrated into your
-        React Native projects.
-      </>
-    ),
-  },
-  {
     title: 'Material You Support',
-    Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
+    icon: '🎨',
     description: (
       <>
         Leverage Android's dynamic theming capabilities for a native feel that
-        adapts to user preferences.
+        adapts to user preferences and wallpaper colors automatically.
       </>
     ),
   },
   {
-    title: 'Cross Platform',
-    Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
+    title: 'Complete Color System',
+    icon: '🌈',
     description: (
       <>
-        Works seamlessly across Android and iOS platforms with proper fallback
-        handling.
+        Access the full Material 3 color palette with 25+ semantic color roles,
+        complete tonal palettes, and multiple contrast levels.
+      </>
+    ),
+  },
+  {
+    title: 'Cross Platform Ready',
+    icon: '📱',
+    description: (
+      <>
+        Works seamlessly across Android and iOS with proper fallback handling.
+        Generate custom themes from any source color.
+      </>
+    ),
+  },
+  {
+    title: 'TypeScript First',
+    icon: '🔧',
+    description: (
+      <>
+        Fully typed interfaces for better development experience with
+        IntelliSense support and compile-time error checking.
+      </>
+    ),
+  },
+  {
+    title: 'Performance Optimized',
+    icon: '⚡',
+    description: (
+      <>
+        Built with performance in mind using efficient hooks, memoization, and
+        minimal re-renders for smooth user experiences.
+      </>
+    ),
+  },
+  {
+    title: 'Easy Integration',
+    icon: '🚀',
+    description: (
+      <>
+        Simple API design that integrates seamlessly with existing React Native
+        apps. Get started with just a few lines of code.
       </>
     ),
   },
 ];
 
-function Feature({ title, Svg, description }: FeatureItem) {
+function Feature({ title, icon, description }: FeatureItem) {
   return (
     <div className={clsx('col col--4')}>
       <div className="text--center">
-        <Svg className={styles.featureSvg} role="img" />
+        <div className={styles.featureIcon}>{icon}</div>
       </div>
       <div className="text--center padding-horiz--md">
         <Heading as="h3">{title}</Heading>
@@ -60,6 +90,13 @@ export default function HomepageFeatures(): ReactNode {
   return (
     <section className={styles.features}>
       <div className="container">
+        <div className="text--center margin-bottom--lg">
+          <Heading as="h2">Why Choose React Native Dynamic Theme?</Heading>
+          <p>
+            Everything you need to implement Material 3 dynamic theming in your
+            React Native app
+          </p>
+        </div>
         <div className="row">
           {FeatureList.map((props, idx) => (
             <Feature key={idx} {...props} />

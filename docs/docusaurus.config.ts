@@ -2,35 +2,24 @@ import { themes as prismThemes } from 'prism-react-renderer';
 import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
-// This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
-
 const config: Config = {
-  title: 'My Site',
-  tagline: 'Dinosaurs are cool',
+  title: 'React Native Dynamic Theme',
+  tagline: 'Material 3 Dynamic Theming for React Native',
   favicon: 'img/favicon.ico',
 
-  // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
-    v4: true, // Improve compatibility with the upcoming Docusaurus v4
+    v4: true,
   },
 
-  // Set the production url of your site here
   url: 'https://your-docusaurus-site.example.com',
-  // Set the /<baseUrl>/ pathname under which your site is served
-  // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
 
-  // GitHub pages deployment config.
-  // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  organizationName: 'FouadMagdy01',
+  projectName: 'react-native-dynamic-theme',
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
 
-  // Even if you don't use internationalization, you can use this field to set
-  // useful metadata like html lang. For example, if your site is Chinese, you
-  // may want to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'en',
     locales: ['en'],
@@ -42,10 +31,8 @@ const config: Config = {
       {
         docs: {
           sidebarPath: './sidebars.ts',
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/FouadMagdy01/react-native-dynamic-theme/tree/main/docs/',
         },
         blog: {
           showReadingTime: true,
@@ -53,14 +40,8 @@ const config: Config = {
             type: ['rss', 'atom'],
             xslt: true,
           },
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
-          // Useful options to enforce blogging best practices
-          onInlineTags: 'warn',
-          onInlineAuthors: 'warn',
-          onUntruncatedBlogPosts: 'warn',
+            'https://github.com/FouadMagdy01/react-native-dynamic-theme/tree/main/docs/',
         },
         theme: {
           customCss: './src/css/custom.css',
@@ -70,25 +51,33 @@ const config: Config = {
   ],
 
   themeConfig: {
-    // Replace with your project's social card
-    image: 'img/docusaurus-social-card.jpg',
+    image: 'img/social-card.jpg',
     navbar: {
-      title: 'My Site',
+      title: 'React Native Dynamic Theme',
       logo: {
-        alt: 'My Site Logo',
+        alt: 'React Native Dynamic Theme Logo',
         src: 'img/logo.svg',
       },
       items: [
         {
-          type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
+          to: '/docs/examples',
+          label: 'Examples',
           position: 'left',
-          label: 'Tutorial',
+        },
+        {
+          to: '/docs/api',
+          label: 'API',
+          position: 'left',
         },
         { to: '/blog', label: 'Blog', position: 'left' },
         {
-          href: 'https://github.com/facebook/docusaurus',
+          href: 'https://github.com/FouadMagdy01/react-native-dynamic-theme',
           label: 'GitHub',
+          position: 'right',
+        },
+        {
+          href: 'https://www.npmjs.com/package/react-native-dynamic-theme',
+          label: 'npm',
           position: 'right',
         },
       ],
@@ -100,8 +89,16 @@ const config: Config = {
           title: 'Docs',
           items: [
             {
-              label: 'Tutorial',
-              to: '/docs/intro',
+              label: 'Getting Started',
+              to: '/docs/getting-started',
+            },
+            {
+              label: 'API Reference',
+              to: '/docs/api',
+            },
+            {
+              label: 'Examples',
+              to: '/docs/examples',
             },
           ],
         },
@@ -109,16 +106,16 @@ const config: Config = {
           title: 'Community',
           items: [
             {
+              label: 'GitHub Issues',
+              href: 'https://github.com/FouadMagdy01/react-native-dynamic-theme/issues',
+            },
+            {
+              label: 'GitHub Discussions',
+              href: 'https://github.com/FouadMagdy01/react-native-dynamic-theme/discussions',
+            },
+            {
               label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-            },
-            {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
-            },
-            {
-              label: 'X',
-              href: 'https://x.com/docusaurus',
+              href: 'https://stackoverflow.com/questions/tagged/react-native-dynamic-theme',
             },
           ],
         },
@@ -131,16 +128,26 @@ const config: Config = {
             },
             {
               label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
+              href: 'https://github.com/FouadMagdy01/react-native-dynamic-theme',
+            },
+            {
+              label: 'npm',
+              href: 'https://www.npmjs.com/package/react-native-dynamic-theme',
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Fouad Magdy. Built with Docusaurus.`,
     },
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
+      additionalLanguages: ['bash', 'diff', 'json'],
+    },
+    colorMode: {
+      defaultMode: 'light',
+      disableSwitch: false,
+      respectPrefersColorScheme: true,
     },
   } satisfies Preset.ThemeConfig,
 };
