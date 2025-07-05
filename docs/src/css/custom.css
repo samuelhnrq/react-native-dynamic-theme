@@ -1,5 +1,6 @@
 /**
  * Custom CSS for React Native Dynamic Theme Documentation
+ * Fixed version - Mobile navbar compatible
  */
 
 /* Import Fonts */
@@ -101,18 +102,12 @@ h6 {
   font-style: italic;
 }
 
-/* Navbar Enhancements */
-.navbar {
-  box-shadow: 0 1px 20px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(20px);
-}
-
 .navbar__brand {
   font-weight: var(--ifm-font-weight-bold);
   font-size: 1.25rem;
 }
 
-.navbar__item {
+.navbar__item:not(.navbar__item--mobile) {
   font-weight: var(--ifm-font-weight-semibold);
 }
 
@@ -148,34 +143,35 @@ h6 {
   }
 }
 
-/* Button Enhancements */
-.button {
+/* Button Enhancements - More specific to avoid navbar conflicts */
+.button:not(.navbar__toggle):not(.clean-btn) {
   font-weight: var(--ifm-font-weight-semibold);
   border-radius: 12px;
   transition: all 0.2s ease;
   text-decoration: none;
 }
 
-.button:hover {
+.button:not(.navbar__toggle):not(.clean-btn):hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(0, 105, 113, 0.3);
   text-decoration: none;
 }
 
-.button--secondary {
+/* Hero buttons specifically */
+.hero .button--secondary {
   background: rgba(255, 255, 255, 0.15);
   border: 2px solid rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(10px);
   color: white;
 }
 
-.button--secondary:hover {
+.hero .button--secondary:hover {
   background: rgba(255, 255, 255, 0.25);
   color: white;
 }
 
-/* Button Outline - More Specific Selectors */
-.button.button--outline {
+/* Hero outline buttons specifically */
+.hero .button.button--outline {
   background: transparent !important;
   border: 2px solid rgba(255, 255, 255, 0.5) !important;
   color: white !important;
@@ -185,17 +181,18 @@ h6 {
   z-index: 1;
 }
 
-.button.button--outline:hover {
+.hero .button.button--outline:hover {
   background: rgba(255, 255, 255, 0.1) !important;
   color: white !important;
   text-decoration: none !important;
   border-color: rgba(255, 255, 255, 0.7) !important;
 }
 
-.button.button--outline:focus {
+.hero .button.button--outline:focus {
   background: rgba(255, 255, 255, 0.1) !important;
   color: white !important;
 }
+
 /* Cards */
 .card {
   border-radius: 16px;
@@ -295,6 +292,18 @@ code {
 
   .markdown h2 {
     font-size: 1.5rem;
+  }
+
+  /* Ensure mobile navbar works properly */
+  .navbar__toggle {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+
+  .navbar__item--mobile {
+    font-weight: var(--ifm-font-weight-semibold);
   }
 }
 
