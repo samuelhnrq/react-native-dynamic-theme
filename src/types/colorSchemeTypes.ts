@@ -7,6 +7,7 @@ export interface AdditionalDynamicColorSchemes {
   darkMediumContrast: ColorScheme;
   darkHighContrast: ColorScheme;
 }
+
 export interface ExtendedDynamicColorScheme
   extends DynamicColorScheme,
     AdditionalDynamicColorSchemes {}
