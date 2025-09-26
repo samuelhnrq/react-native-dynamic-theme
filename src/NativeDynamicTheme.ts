@@ -1,5 +1,4 @@
 import type { TurboModule } from 'react-native';
-import { TurboModuleRegistry } from 'react-native';
 
 export interface ColorScheme {
   primary: string;
@@ -48,5 +47,3 @@ export interface DynamicColorScheme {
 export interface Spec extends TurboModule {
   getDynamicColorScheme(): DynamicColorScheme;
 }
-
-export default TurboModuleRegistry.getEnforcing<Spec>('DynamicTheme');

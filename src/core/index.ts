@@ -1,5 +1,5 @@
-import { Platform } from 'react-native';
-import DynamicTheme, { type DynamicColorScheme } from '../NativeDynamicTheme';
+import { Platform, TurboModuleRegistry } from 'react-native';
+import type { DynamicColorScheme, Spec } from '../NativeDynamicTheme';
 import {
   createAdditionalDynamicColorSchemeFromSourceColor,
   createDynamicColorSchemeFromSourceColor,
@@ -36,8 +36,9 @@ export const getExtendedDynamicColorSchemeFromSourceColor = (
 export const getDynamicColorScheme = (
   fallbackColor?: string | undefined
 ): DynamicColorScheme => {
-  if (Platform.OS == 'android' && Platform.Version >= 31) {
-    return DynamicTheme.getDynamicColorScheme();
+  if (Platform.OS === 'android' && Platform.Version >= 31) {
+    const module = TurboModuleRegistry.getEnforcing<Spec>('DynamicTheme');
+    return module.getDynamicColorScheme();
   } else if (fallbackColor) {
     return createDynamicColorSchemeFromSourceColor(fallbackColor);
   } else {
